@@ -1,20 +1,23 @@
-const todoList = document.getElementById('todoList');
-const todoItem = document.getElementById('item');
-function addItem() {
-  const todoItems = [];
-  if(todoItem.value === "") return;
-  todoItems.push(todoItem.value);
-  todoItem.value = "";
-  for (i in todoItems){
-    let li = document.createElement('li');
-    li.innerHTML = `<input type="checkbox" onchange="myChange(event)">` + `<span>${ todoItems[i] }</span>` + `<button onclick="deleteItem(event)">Delete</button>`;
-    todoList.appendChild(li);
-  }
-}
-function myChange(event){
-  event.target.classList.toggle('done');
-}
-function deleteItem(event){
-  const del_parent = event.target.parentElement;
-  todoList.removeChild(del_parent);
-}
+var todoList = $('#todoList');
+var todoItem = $('#item');
+
+
+$('#addItem').on('click',function(){ 
+  if(todoItem.val() === "") return;
+  var todoItems = todoItem.val();
+  $('<li></li>')
+    .append('<input type="checkbox" class="myChange"><span>' + todoItems + '</span><button class="deleteItem">Delete</button>')
+        .appendTo(todoList);
+  todoItem.val("");
+})
+
+todoList.on('change','.myChange',function(e){
+  $(this).siblings('span').toggleClass('done');
+ e.stopPropagation();
+})
+todoList.on('click','.deleteItem',function(e){
+  $(this).parent().remove();
+  console.log($(this).index())
+  todoItems[$(this).index()] = '';
+  e.stopPropagation();
+})
